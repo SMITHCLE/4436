@@ -18,7 +18,12 @@
       <li>Buy 2 loaves, get 1 free on Saturdays</li>
     </ul>
     <p>Subscribers get access to <a href="/deals">exclusive deals</a>.</p>
-    <!-- Subscribe form is added in the next step (POST /subscribe) -->
+    <h2 id="subscribe">Subscribe</h2>
+    <form method="POST" action="/subscribe">
+      <p><label>Name <input type="text" name="name" required></label></p>
+      <p><label>Email <input type="email" name="email" required></label></p>
+      <button type="submit">Subscribe</button>
+    </form>
   </main>
 </body>
 </html>
