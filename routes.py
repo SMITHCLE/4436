@@ -26,6 +26,7 @@ REASONS = {
     404: "Not Found",
     405: "Method Not Allowed",
     413: "Payload Too Large",
+    500: "Internal Server Error",
 }
 
 # File extension -> Content-Type header, so the browser knows how to render the bytes.
@@ -125,6 +126,8 @@ def serve_static(path):
 
     # SECURITY: resolve to a real path and require it to stay inside public/,
     # otherwise "GET /../server.py" would read arbitrary files (path traversal).
+    if "\x00" in path:                      # null bytes can't be in a filename
+        return error_page(404, "Not Found")
     root = os.path.realpath(PUBLIC_DIR)
     full = os.path.realpath(os.path.join(PUBLIC_DIR, path.lstrip("/")))
     if os.path.commonpath([full, root]) != root or not os.path.isfile(full):

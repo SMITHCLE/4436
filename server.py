@@ -132,7 +132,11 @@ def handle_connection(conn, addr):
             conn.sendall(routes.build_response(413, "<h1>413 Payload Too Large</h1>"))
             return
 
-        response = routes.handle_request(method, path, query, headers, body)
+        try:
+            response = routes.handle_request(method, path, query, headers, body)
+        except Exception as exc:                 # a bug in a handler must not leave the client hanging
+            print(f"ERROR handling {method} {path}: {exc!r}", flush=True)
+            response = routes.build_response(500, "<h1>500 Internal Server Error</h1>")
         status = response.split(b" ", 2)[1].decode()
         # Log the path only (not the query) so tokens don't leak into console logs.
         print(f"[{threading.current_thread().name}] {addr[0]}:{addr[1]} {method} {path} -> {status}", flush=True)
