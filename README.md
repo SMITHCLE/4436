@@ -17,9 +17,9 @@ Open http://localhost:8080 in a browser. Stop with Ctrl+C.
 | Path | Purpose |
 |---|---|
 | `server.py` | Socket setup, accept loop, thread-per-connection, reading/parsing raw requests |
-| `routes.py` | Response building, routing, `/subscribe`, token check, logging |
-| `public/` | `index.html`, `deals.html`, `style.css`, `404.html`, `403.html`, `images/` |
-| `subscribers.log` | Created at runtime. One JSON object per line: timestamp, name, email, token |
+| `routes.py` | Response building, routing, `/subscribe`, `/login`, token check, visit tiers, logging |
+| `public/` | `index.html`, `login.html`, `deals.html`, `style.css`, `404.html`, `403.html`, `images/` (PNG + JPEG) |
+| `subscribers.log` | Created at runtime. One JSON line per visit (subscribe or login): timestamp, event, name, email, token |
 
 ## Test with curl
 
@@ -44,7 +44,19 @@ Open http://localhost:8080 in a browser. Stop with Ctrl+C.
    ```bash
    curl -i "http://localhost:8080/deals?token=PASTE_TOKEN_HERE"
    ```
-6. Extras: `curl -i -d "name=&email=x" http://localhost:8080/subscribe` -> 400;
+6. **Returning customer login** - needs the email used in step 4. Each login logs a visit with a NEW token; the
+   3rd+ visit is a "returning" customer and the 4th+ a "frequent" customer (different banner and reward on the deals page).
+   An email that never subscribed gets a friendly 403 page.
+   ```bash
+   curl -i -d "email=ann@example.com" http://localhost:8080/login
+   curl -i -d "email=nobody@example.com" http://localhost:8080/login
+   ```
+7. **Images** - fetched as separate HTTP requests, with their own Content-Type (`image/png`, `image/jpeg`)
+   ```bash
+   curl -i http://localhost:8080/images/donuts.png --output NUL
+   curl -I http://localhost:8080/images/bread.jpg
+   ```
+8. Extras: `curl -i -d "name=&email=x" http://localhost:8080/subscribe` -> 400;
    `curl -i http://localhost:8080/subscribe` -> 405.
 
 Check `cat subscribers.log` afterwards to see the logged subscriber and token.

@@ -5,3 +5,11 @@ a { color: #c25a10; }
 form label { display: block; }
 input { padding: .3rem; margin-left: .5rem; }
 button { background: #e67828; color: #fff; border: 0; padding: .5rem 1rem; cursor: pointer; border-radius: 4px; }
+a.button { display: inline-block; background: #e67828; color: #fff; padding: .5rem 1rem; border-radius: 4px; text-decoration: none; }
+.deal { display: flex; gap: 1rem; align-items: center; margin: 1rem 0; border: 1px solid #eee; border-radius: 8px; padding: .5rem; }
+.deal img { border-radius: 6px; max-width: 40%; height: auto; }
+.deal h2 { margin: 0 0 .3rem; }
+.tier { border-left: 6px solid #e67828; background: #fff3e0; padding: .5rem 1rem; border-radius: 6px; margin-bottom: 1rem; }
+.tier.returning { border-color: #1976d2; background: #e3f2fd; }
+.tier.frequent { border-color: #2e7d32; background: #e8f5e9; }
+.badge-tier { font-size: .8rem; font-weight: bold; text-transform: uppercase; letter-spacing: .05em; }
